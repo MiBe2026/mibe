@@ -405,25 +405,34 @@
     /* ─── TIMELINE ───────────────────────────────────────────── */
     #timeline { background: var(--bg); }
     .timeline-wrap {
-      position: relative;
-      padding-left: 32px;
+    position: relative;
+    padding-left: 32px;
     }
-    .timeline-line {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 2px;
-      height: 100%;
-      background: var(--border);
-      overflow: hidden;
+    .timeline-svg {
+    position: absolute;
+    left: -6px;
+    top: 0;
+    width: 14px;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none;
     }
-    .timeline-line-fill {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      background: linear-gradient(to bottom, var(--orange), var(--blue-acc));
-      height: 0%;
-      transition: height 0.1s linear;
+    .timeline-svg-track {
+    stroke: var(--border);
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    }
+    .timeline-svg-fill {
+    stroke-width: 2;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke: var(--orange);
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.05s linear;
     }
     .milestone {
       position: relative;
@@ -499,15 +508,7 @@
       color: var(--text);
     }
 
-    /* mental health milestone */
-    .milestone.pivot {
-      border-left: 2px solid var(--orange);
-      padding-left: 16px;
-      margin-left: -18px;
-    }
-    .milestone.pivot .milestone-dot {
-      left: -56px;
-    }
+
 
     /* ─── IPOS ───────────────────────────────────────────────── */
     #ipos { background: var(--bg2); }

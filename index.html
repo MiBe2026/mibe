@@ -8,8 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
-
-<link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -28,10 +27,7 @@
   <!-- NAV -->
   <nav>
     <div class="nav-mark">
-      <!-- MiBe square mark (inline SVG) -->
-      <svg>
-        <img src="mibe-mark-orange.svg" alt="MiBe mark" width="32" height="32" />
-      </svg>
+      <img src="mibe-mark-orange.svg" alt="MiBe mark" width="32" height="32" />
       <div>
         <span class="name">MiBe</span>
       </div>
@@ -56,7 +52,7 @@
       <h1 class="hero-title">Mi<span class="orange">Be</span></h1>
       <p class="hero-sub">
         <strong>Jack of all, master of fuck all.</strong><br/>
-        Software engineer turned construction site operative. Currently both.<br/>
+        Software engineer turned construction site operative. Currently both.
       </p>
       <div class="hero-cta">
         <a href="#ipos" class="btn btn-primary">See IPOS →</a>
@@ -85,8 +81,8 @@
             A quote that accurately represents the brand, the philosophy, the sheer nature of everything MiBe touches:
           </p>
           <div class="aside">
-            "Why do today, what can be done tomorrow" <br/>
-            The Underachievers Manifesto<br/>
+            "Why do today, what can be done tomorrow"<br/>
+            The Underachievers Manifesto
           </div>
           <p>
             <strong>Construction software</strong> built from actual site experience. That's not a marketing angle —
@@ -108,10 +104,7 @@
           </div>
           <div class="stat-card">
             <div class="stat-number highlight">Present</div>
-            <div class="stat-label">one person, <br/>
-              one brand,<br/>
-              one point of failure<br/>
-            </div>
+            <div class="stat-label">one person,<br/>one brand,<br/>one point of failure</div>
           </div>
         </div>
       </div>
@@ -127,14 +120,19 @@
       <h2 class="section-title reveal reveal-delay-1">How we got here.<br/><span style="color:var(--muted);font-size:0.6em;font-weight:400;">Spoiler: not in a straight line.</span></h2>
 
       <div class="timeline-wrap">
-        <div class="timeline-line"><div class="timeline-line-fill" id="timeline-fill"></div></div>
+
+        <!-- SVG timeline line — straight except around the 2020 pivot -->
+        <svg class="timeline-svg" id="timeline-svg" preserveAspectRatio="none">
+          <path class="timeline-svg-track" id="timeline-path-track" d=""/>
+          <path class="timeline-svg-fill"  id="timeline-path-fill"  d=""/>
+        </svg>
 
         <div class="milestone" data-delay="0">
           <div class="milestone-dot"></div>
           <p class="milestone-year">GCSE</p>
           <h3 class="milestone-title">Pretty average.</h3>
           <p class="milestone-body">
-            Standard school career. Nothing remarkable — except a rogue <strong>grade A in Food Technology.</strong>
+            Standard school career. Nothing remarkable — except a rogue <strong>grade A in Food Technology</strong>
             that remains, to this day, a personal best.
           </p>
           <span class="milestone-tag">🍳 barely edible</span>
@@ -145,8 +143,8 @@
           <p class="milestone-year">Post A-Levels</p>
           <h3 class="milestone-title">University.</h3>
           <p class="milestone-body">
-            BEng (Hons) International Computing Science. Graduated with a desmond <strong>(2:2) </strong>,
-            which is the respectable way of saying student life was enjoyed. <br/>
+            BEng (Hons) International Computing Science. Graduated with a desmond <strong>(2:2)</strong>,
+            which is the respectable way of saying student life was enjoyed.<br/>
             A year off first. No regrets.
           </p>
           <span class="milestone-tag blue">🎓 2:2 and proud</span>
@@ -157,8 +155,8 @@
           <p class="milestone-year">Early career</p>
           <h3 class="milestone-title">Graduate scheme. Then contracting.</h3>
           <p class="milestone-body">
-            Started on a graduate scheme doing software testing for a company that makes headlines for all the wrong reasons. 
-            Did that for two years, fnished it, then went contracting. Financial institutions, mostly. The work was fine.
+            Started on a graduate scheme doing software testing for a company that makes headlines for all the wrong reasons.
+            Did that for two years, finished it, then went contracting. Financial institutions, mostly. The work was fine.
             The commute was fine. Everything was fine.
           </p>
           <span class="milestone-tag blue">🔥 everything wasn't fine</span>
@@ -227,8 +225,7 @@
         <div class="ipos-card reveal">
           <div class="ipos-card-icon">📍</div>
           <h3 class="ipos-card-title">Know where it is</h3>
-          <p class="ipos-card-body">Track materials on site in real time. Not "probably by the hoarding." Actually on site, on a timber rack, 
-            in a compound.</p>
+          <p class="ipos-card-body">Track materials on site in real time. Not "probably by the hoarding." Actually on site, on a timber rack, in a compound.</p>
         </div>
         <div class="ipos-card reveal reveal-delay-1">
           <div class="ipos-card-icon">📦</div>
@@ -238,8 +235,7 @@
         <div class="ipos-card reveal reveal-delay-2">
           <div class="ipos-card-icon">🔧</div>
           <h3 class="ipos-card-title">Built by someone on site</h3>
-          <p class="ipos-card-body">Not a site manager's idea of what site workers need. <br/>
-            Built by a site worker, for site workers.</p>
+          <p class="ipos-card-body">Not a site manager's idea of what site workers need.<br/>Built by a site worker, for site workers.</p>
         </div>
       </div>
 
@@ -268,7 +264,6 @@
             or just want to say something — GitHub is the place.
           </p>
           <p style="font-family:var(--font-mono);font-size:12px;color:var(--muted);">
-            <!-- easter egg: hoverable -->
             <span title="Not on LinkedIn. Not on Twitter. Not anywhere you'd look.">MiBe has no social media presence.</span>
             That's intentional.
           </p>
@@ -346,19 +341,66 @@
     }, { threshold: 0.2 });
     milestones.forEach(m => msObs.observe(m));
 
-    // ── TIMELINE LINE FILL ─────────────────────────────────────
+    // ── TIMELINE SVG PATH ──────────────────────────────────────
     const timelineSection = document.getElementById('timeline');
-    const fill = document.getElementById('timeline-fill');
-    function updateFill() {
-      const rect = timelineSection.getBoundingClientRect();
-      const vh   = window.innerHeight;
+    const timelineSvg     = document.getElementById('timeline-svg');
+    const pathTrack       = document.getElementById('timeline-path-track');
+    const pathFill        = document.getElementById('timeline-path-fill');
+
+    function buildTimelinePath() {
+      const wrap      = document.querySelector('.timeline-wrap');
+      const wrapRect  = wrap.getBoundingClientRect();
+      const totalH    = wrap.offsetHeight;
+
+      const pivot     = document.querySelector('.milestone.pivot');
+      const pivotRect = pivot.getBoundingClientRect();
+      const pivotTop  = pivotRect.top    - wrapRect.top;
+      const pivotBot  = pivotRect.bottom - wrapRect.top;
+
+      const cx        = 7;
+      const chaoStart = pivotTop  - 60;
+      const chaoEnd   = pivotBot  + 60;
+      const zigW      = 12;
+      const steps     = 12;
+      const segH      = (chaoEnd - chaoStart) / steps;
+
+      let d = `M ${cx} 0`;
+      d += ` L ${cx} ${chaoStart}`;
+
+      for (let i = 0; i < steps; i++) {
+        const y    = chaoStart + (i + 0.5) * segH;
+        const side = i % 2 === 0 ? cx - zigW : cx + zigW;
+        d += ` L ${side} ${y}`;
+      }
+
+      d += ` L ${cx} ${chaoEnd}`;
+      d += ` L ${cx} ${totalH}`;
+
+      timelineSvg.setAttribute('height', totalH);
+      timelineSvg.setAttribute('viewBox', `0 0 14 ${totalH}`);
+
+      pathTrack.setAttribute('d', d);
+      pathFill.setAttribute('d', d);
+
+      const len = pathFill.getTotalLength();
+      pathFill.style.strokeDasharray  = len;
+      pathFill.style.strokeDashoffset = len;
+      pathFill._len = len;
+    }
+
+    function updateTimelineFill() {
+      const rect     = timelineSection.getBoundingClientRect();
+      const vh       = window.innerHeight;
       const progress = Math.min(1, Math.max(0,
         (vh - rect.top) / (rect.height + vh)
       ));
-      fill.style.height = (progress * 100) + '%';
+      const len = pathFill._len || 0;
+      pathFill.style.strokeDashoffset = len * (1 - progress);
     }
-    window.addEventListener('scroll', updateFill, { passive: true });
-    updateFill();
+
+    window.addEventListener('load',   () => { buildTimelinePath(); updateTimelineFill(); });
+    window.addEventListener('resize', () => { buildTimelinePath(); updateTimelineFill(); });
+    window.addEventListener('scroll', updateTimelineFill, { passive: true });
 
     // ── MOBILE NAV CLOSE ON LINK ───────────────────────────────
     document.querySelectorAll('.nav-links a').forEach(a => {
@@ -382,9 +424,16 @@
       }
     });
 
-    // ── EASTER EGG: source code (visible in comments) ─────────
-    // ── EASTER EGG: "no social media" tooltip ─────────────────
-    // handled via HTML title attr above
+    /*
+      ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+      ░  You found the source. Fair play.              ░
+      ░  MiBe is one person.                           ░
+      ░  Built on a construction site,                 ░
+      ░  between deliveries.                           ░
+      ░  The orange is high-viz.                       ░
+      ░  The fruit can fuck off.                       ░
+      ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+    */
 
   </script>
 </body>
