@@ -2,7 +2,7 @@
 
 ## What this is
 
-IPOS (It’s Probably On Site) is a materials management PWA for Vistry Group housebuilding sites, built under the MiBe brand. Multi-tenant SaaS. Single operator enters all data. Trades and site managers get read-only access via token URL.
+IPOS (It's Probably On Site) is a materials management PWA for Vistry Group housebuilding sites, built under the MiBe brand. Multi-tenant SaaS. Single operator enters all data. Trades and site managers get read-only access via token URL.
 
 -----
 
@@ -43,7 +43,7 @@ IPOS (It’s Probably On Site) is a materials management PWA for Vistry Group ho
 
 -----
 
-## Deferred scope (don’t build yet)
+## Deferred scope (don't build yet)
 
 - Client dashboard access and login
 - Role-based access control (RBAC) — schema designed, not built
@@ -63,7 +63,7 @@ IPOS (It’s Probably On Site) is a materials management PWA for Vistry Group ho
 - **Calloff** not order request
 - **BOM** or **schedule** not bill (Vistry say schedule)
 - **Fix stage** = 1st fix or 2nd fix
-- **PFS** = Private For Sale (not “private”)
+- **PFS** = Private For Sale (not "private")
 - **W/c** = week commencing
 
 -----
