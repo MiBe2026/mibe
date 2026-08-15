@@ -19,6 +19,7 @@
       --nav-bg:     rgba(26,26,26,0.85);
       --font-display: Arial, Helvetica, sans-serif;
       --font-logo:    'Press Start 2P', 'JetBrains Mono', monospace;
+      --font-mono:    ui-monospace, 'SF Mono', 'Cascadia Code', 'Roboto Mono', Menlo, Consolas, 'Courier New', monospace;
     }
 
     /* ─── LIGHT THEME — MiBe Brand Guidelines v3.1 palette ──────
@@ -708,7 +709,10 @@
       overflow: hidden;
       border: 1px solid var(--border);
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
-      font-family: var(--font-logo);
+      /* system monospace, not the P2 wordmark font — v1.3 reserves P2 for
+         the wordmark and short display headers, never running text, and
+         this block is a multi-line file listing someone reads line by line */
+      font-family: var(--font-mono);
     }
     .terminal-titlebar {
       display: flex;
