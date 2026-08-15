@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ember &amp; Oak — Wood-fired neighbourhood restaurant</title>
+  <meta name="description" content="Slow food, open flame, good company. Menu, hours, and reservations for Ember & Oak." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Source+Serif+4:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <nav class="topbar">
+    <div class="topbar-inner">
+      <a href="#" class="wordmark">Ember <em>&amp;</em> Oak</a>
+      <ul class="nav-links">
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#reserve">Reserve</a></li>
+        <li><a href="#hours">Hours &amp; location</a></li>
+      </ul>
+      <span class="status-badge" id="statusBadge">—</span>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap hero-inner">
+      <div class="hero-eyebrow">Est. neighbourhood kitchen</div>
+      <h1>Slow food, <em>open flame</em>,<br />good company.</h1>
+      <p class="lede">Everything at Ember &amp; Oak passes over wood coals before it reaches your table — from the bread to the dessert.</p>
+      <div class="hero-cta">
+        <a href="#reserve" class="btn btn-solid">Book a table</a>
+        <a href="#menu" class="btn btn-outline">View the menu</a>
+      </div>
+    </div>
+  </header>
+
+  <hr class="rule" />
+
+  <section id="menu">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-eyebrow">On the pass tonight</div>
+        <h2>The menu</h2>
+      </div>
+
+      <div class="filter-chips">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="veg">Vegetarian</button>
+        <button class="chip" data-filter="nuts">Contains nuts</button>
+      </div>
+
+      <div id="menuList"></div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section id="reserve">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-eyebrow">Book ahead</div>
+        <h2>Reserve a table</h2>
+      </div>
+
+      <div id="upcomingBanner"></div>
+
+      <div class="res-panel">
+        <form id="resForm">
+          <div class="form-row two">
+            <div>
+              <label for="resName">Name</label>
+              <input type="text" id="resName" required placeholder="Your name" />
+            </div>
+            <div>
+              <label for="resPhone">Phone</label>
+              <input type="tel" id="resPhone" required placeholder="07…" />
+            </div>
+          </div>
+          <div class="form-row two">
+            <div>
+              <label for="resDate">Date</label>
+              <input type="date" id="resDate" required />
+            </div>
+            <div>
+              <label for="resTime">Time</label>
+              <input type="time" id="resTime" required value="19:00" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="resParty">Party size</label>
+            <select id="resParty">
+              <option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option><option>7+</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-solid res-submit" id="resSubmitBtn">Request table</button>
+          <p class="res-note">This is a concept demo — no table is actually booked.</p>
+        </form>
+
+        <div class="res-pending" id="resPending" style="display:none;">Checking availability…</div>
+
+        <div class="res-confirm" id="resConfirm" style="display:none;">
+          <h2 style="font-size:22px;">Table requested</h2>
+          <p style="color:var(--muted);margin-top:10px;" id="resConfirmDetail"></p>
+          <div class="ref" id="resRef"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule" />
+
+  <section id="hours">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="section-eyebrow">Find us</div>
+        <h2>Hours &amp; location</h2>
+      </div>
+
+      <div class="hours-grid">
+        <div class="hours-list" id="hoursList"></div>
+        <div class="address-block">
+          14 Kiln Row<br />
+          Fenwick Quarter
+          <span class="small">Walk-ins welcome at the bar.<br />Kitchen closes 30 minutes before last orders.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    Ember &amp; Oak is a concept demo site.
+    <br />
+    <a href="https://mibe.uk" class="mibe-credit" target="_blank" rel="noopener">Site concept &amp; build: MiBe</a>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

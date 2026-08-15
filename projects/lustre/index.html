@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lustre — Book your appointment</title>
+  <meta name="description" content="Book a service at Lustre — pick a service, a stylist, and a time." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="wrap">
+
+    <header class="topbar">
+      <a href="index.html" class="logo">Lu<span>str</span>e</a>
+      <div class="tagline">Book your next look in under a minute.</div>
+    </header>
+
+    <div class="progress">
+      <div class="progress-step active" data-step="1">1 · Service</div>
+      <div class="progress-step" data-step="2">2 · Stylist</div>
+      <div class="progress-step" data-step="3">3 · Time</div>
+      <div class="progress-step" data-step="4">4 · Confirm</div>
+    </div>
+
+    <div class="card">
+
+      <!-- STEP 1 — SERVICES -->
+      <section class="step active" id="step-1">
+        <h2>Choose your service</h2>
+        <p class="step-sub">Select one or more — we'll total up the time and price as you go.</p>
+        <div id="serviceList"></div>
+        <div class="summary-bar">
+          <div class="summary-info"><strong id="svcSummaryCount">0 services</strong> selected · <strong id="svcSummaryPrice">£0</strong></div>
+          <div class="btn-row">
+            <button class="btn btn-primary" id="toStep2" disabled>Continue →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 2 — STYLIST -->
+      <section class="step" id="step-2">
+        <h2>Choose your stylist</h2>
+        <p class="step-sub">Or let us pick whoever's free first.</p>
+        <div class="stylist-list" id="stylistList"></div>
+        <div class="summary-bar">
+          <div class="btn-row">
+            <button class="btn btn-ghost" id="backTo1">← Back</button>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-primary" id="toStep3" disabled>Continue →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 3 — DATE & TIME -->
+      <section class="step" id="step-3">
+        <h2>Choose your time</h2>
+        <p class="step-sub">Times already booked in this demo are shown struck through.</p>
+        <div class="day-tabs" id="dayTabs"></div>
+        <div class="slot-grid" id="slotGrid"></div>
+        <div class="summary-bar">
+          <div class="btn-row">
+            <button class="btn btn-ghost" id="backTo2">← Back</button>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-primary" id="toStep4" disabled>Continue →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- STEP 4 — CONFIRM -->
+      <section class="step" id="step-4">
+        <div id="confirmView">
+          <h2>Confirm your booking</h2>
+          <p class="step-sub">Double check the details below.</p>
+          <div class="confirm-list" id="confirmList"></div>
+          <div class="confirm-total">
+            <span>Total</span>
+            <span id="confirmTotal">£0</span>
+          </div>
+          <div class="summary-bar">
+            <div class="btn-row">
+              <button class="btn btn-ghost" id="backTo3">← Back</button>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-primary" id="confirmBtn">Confirm booking</button>
+            </div>
+          </div>
+        </div>
+        <div id="doneView" style="display:none;">
+          <div class="done-state">
+            <div class="done-icon">✓</div>
+            <h2>You're booked in</h2>
+            <p class="step-sub" id="doneSummary"></p>
+            <div class="done-ref" id="doneRef"></div>
+            <div class="summary-bar" style="justify-content:center;border-top:none;padding-top:24px;">
+              <button class="btn btn-ghost" id="bookAnother">Book another appointment</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer class="site-footer">
+      Lustre is a concept demo — no real appointments are booked.
+      <br />
+      <a href="https://mibe.uk" class="mibe-credit" target="_blank" rel="noopener">Site concept &amp; build: MiBe</a>
+      <br />
+      <button class="reset-link" id="resetDemo">Reset demo data</button>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

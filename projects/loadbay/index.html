@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loadbay — Materials call-off &amp; dispatch</title>
+  <meta name="description" content="Call off plots from an active order and generate a manufacturing reference and itemized packing slip." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-mark">L</span>
+        Loadbay
+      </a>
+      <div class="topbar-meta">
+        <span>Account: <strong>Elm Grove Developments Ltd</strong></span>
+        <span>Depot: <strong>Midlands North</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+
+    <div class="order-header">
+      <div>
+        <div class="eyebrow">Active order</div>
+        <h1><span id="orderRef"></span> — <span id="projectName"></span></h1>
+        <div class="order-sub">Select one or more plots below and call off materials for dispatch.</div>
+      </div>
+      <div class="order-stats">
+        <div class="order-stat">
+          <div class="val" id="plotTotal"></div>
+          <div class="lbl">Plots on order</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input type="text" id="search" class="search-input" placeholder="Filter by plot or type…" />
+      <button class="select-all-btn" id="selectAllBtn">Select / deselect all</button>
+    </div>
+
+    <div class="plot-list" id="plotList"></div>
+
+    <div class="basket">
+      <div class="basket-info">
+        <div>
+          <div class="val"><span id="basketCount">0</span> plots</div>
+          <div class="lbl">Selected</div>
+        </div>
+        <div>
+          <div class="val"><span id="basketItems">0</span> lines</div>
+          <div class="lbl">Total items</div>
+        </div>
+      </div>
+      <button class="btn-generate" id="generateBtn" disabled>Generate call-off →</button>
+    </div>
+
+    <footer class="site-footer">
+      <span>Loadbay is a concept demo — no real orders, no real dispatch.</span>
+      <a href="https://mibe.uk" class="mibe-credit" target="_blank" rel="noopener">Site concept &amp; build: MiBe</a>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

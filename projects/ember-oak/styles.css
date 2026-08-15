@@ -1,0 +1,298 @@
+/* Ember & Oak — restaurant
+   Warm, dark, editorial. Wood-fired, evening feel. */
+
+:root {
+  --bg: #2B211C;
+  --surface: #362A23;
+  --surface-2: #3F312A;
+  --cream: #F5EDE1;
+  --parchment: #EFE2CE;
+  --border: rgba(245, 237, 225, 0.14);
+  --text: #F5EDE1;
+  --muted: #BFA98F;
+  --brick: #B23A2E;
+  --gold: #C89B3C;
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Source Serif 4', serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+a { color: inherit; }
+
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 28px;
+}
+
+section { padding: 72px 0; }
+
+hr.rule {
+  border: none;
+  border-top: 1px solid var(--border);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ─── NAV ────────────────────────────────────────────── */
+
+nav.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  background: rgba(43, 33, 28, 0.82);
+  border-bottom: 1px solid var(--border);
+}
+.topbar-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 18px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+.wordmark em { font-style: italic; color: var(--gold); }
+.nav-links { list-style: none; display: flex; gap: 24px; font-size: 13.5px; }
+.nav-links a { text-decoration: none; color: var(--muted); }
+.nav-links a:hover { color: var(--cream); }
+.status-badge {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+.status-badge.open { color: #8FBF8A; border-color: rgba(143,191,138,0.4); }
+.status-badge.closed { color: #C98F86; border-color: rgba(201,143,134,0.4); }
+
+/* ─── HERO ───────────────────────────────────────────── */
+
+.hero {
+  position: relative;
+  padding: 110px 0 90px;
+  text-align: center;
+  overflow: hidden;
+}
+.hero::before, .hero::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.5;
+  z-index: 0;
+}
+.hero::before {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, var(--brick), transparent 70%);
+  top: -140px; left: -120px;
+}
+.hero::after {
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, var(--gold), transparent 70%);
+  bottom: -160px; right: -100px;
+  opacity: 0.3;
+}
+.hero-inner { position: relative; z-index: 1; }
+.hero-eyebrow {
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 7vw, 68px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero p.lede {
+  max-width: 480px;
+  margin: 22px auto 0;
+  color: var(--muted);
+  font-size: 17px;
+}
+.hero-cta { margin-top: 34px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  padding: 13px 26px;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  border: 1px solid transparent;
+}
+.btn-solid { background: var(--brick); color: var(--cream); }
+.btn-solid:hover { background: #9c3226; }
+.btn-outline { border-color: var(--border); color: var(--cream); background: transparent; }
+.btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ─── SECTION HEAD ───────────────────────────────────── */
+
+.section-head { text-align: center; margin-bottom: 48px; }
+.section-eyebrow {
+  font-size: 12.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.section-head h2 {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 5vw, 42px);
+  font-weight: 600;
+}
+
+/* ─── MENU ───────────────────────────────────────────── */
+
+.filter-chips {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 44px;
+  flex-wrap: wrap;
+}
+.chip {
+  font-size: 13px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  color: var(--muted);
+  background: transparent;
+  font-family: var(--font-body);
+}
+.chip.active { border-color: var(--gold); color: var(--gold); background: rgba(200,155,60,0.1); }
+
+.menu-cat { margin-bottom: 40px; }
+.menu-cat-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--gold);
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+}
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.menu-item:last-child { border-bottom: none; }
+.menu-item.hidden { display: none; }
+.menu-item-name { font-weight: 600; font-size: 16px; }
+.menu-item-desc { color: var(--muted); font-size: 14px; margin-top: 4px; max-width: 520px; }
+.menu-item-tags { font-size: 11px; color: var(--gold); margin-top: 5px; letter-spacing: 0.04em; }
+.menu-item-price { font-family: var(--font-display); font-size: 16px; white-space: nowrap; padding-top: 2px; }
+
+/* ─── RESERVATION ────────────────────────────────────── */
+
+.res-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 40px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+.form-row { margin-bottom: 18px; }
+.form-row.two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+label {
+  display: block;
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-bottom: 7px;
+  letter-spacing: 0.02em;
+}
+input, select {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  padding: 11px 13px;
+  border-radius: 4px;
+  outline: none;
+}
+input:focus, select:focus { border-color: var(--gold); }
+.res-submit { width: 100%; margin-top: 8px; text-align: center; border: none; }
+.res-note { font-size: 12.5px; color: var(--muted); margin-top: 14px; text-align: center; }
+
+.res-confirm { text-align: center; padding: 12px 0; }
+.res-confirm .ref { font-family: var(--font-display); font-style: italic; color: var(--gold); font-size: 18px; margin-top: 10px; }
+.res-pending { text-align: center; padding: 30px 0; color: var(--muted); }
+
+.upcoming-banner {
+  max-width: 560px;
+  margin: 0 auto 24px;
+  background: rgba(200,155,60,0.1);
+  border: 1px solid rgba(200,155,60,0.3);
+  border-radius: 6px;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  color: var(--gold);
+  text-align: center;
+}
+
+/* ─── HOURS / LOCATION ───────────────────────────────── */
+
+.hours-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  max-width: 620px;
+  margin: 0 auto;
+}
+.hours-list div { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border); font-size: 14.5px; }
+.hours-list div span:first-child { color: var(--muted); }
+.address-block { font-family: var(--font-display); font-style: italic; font-size: 19px; line-height: 1.7; }
+.address-block .small { display: block; font-family: var(--font-body); font-style: normal; font-size: 13.5px; color: var(--muted); margin-top: 14px; }
+
+@media (max-width: 640px) {
+  .hours-grid { grid-template-columns: 1fr; gap: 28px; }
+  .form-row.two { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .res-panel { padding: 26px; }
+}
+
+/* ─── FOOTER ─────────────────────────────────────────── */
+
+footer.site-footer {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.mibe-credit {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--border);
+}
+.mibe-credit:hover { color: var(--gold); border-color: var(--gold); }
