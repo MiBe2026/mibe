@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Say hello — MiBe</title>
+  <meta name="description" content="Got a MiBe card? Say hello." />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="../mibe-mark.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../style.css" />
+  <script>
+    // applied before first paint so the page never flashes the wrong theme
+    (function () {
+      if (localStorage.getItem('mibe-theme') === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+  </script>
+</head>
+<body class="card-page">
+
+  <!-- Custom cursor -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <button class="theme-toggle card-theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light theme">🌙</button>
+
+  <main class="card-hero">
+    <img src="../mibe-mark.svg" alt="MiBe mark" class="card-mark" width="56" height="40" />
+    <h1 class="card-title">Hey.</h1>
+    <p class="card-sub">You've got a card, so you already know who this is. Say hello.</p>
+
+    <form class="contact-form card-form" id="contact-form">
+      <div class="form-row">
+        <label for="cf-name">Name</label>
+        <input type="text" id="cf-name" name="name" autocomplete="name" required maxlength="120" />
+      </div>
+      <div class="form-row">
+        <label for="cf-email">Email</label>
+        <input type="email" id="cf-email" name="email" autocomplete="email" required maxlength="200" />
+      </div>
+      <div class="form-row">
+        <label for="cf-message">Message</label>
+        <textarea id="cf-message" name="message" required maxlength="4000" placeholder="Your message here..."></textarea>
+      </div>
+
+      <!-- lets card-sourced enquiries be told apart from the main site's
+           contact form on arrival — attribution by channel, not tracking -->
+      <input type="hidden" id="cf-source" name="source" value="card" />
+
+      <!-- honeypot: left open for bots, hidden from real users and screen readers -->
+      <div class="form-hp" aria-hidden="true">
+        <label for="cf-website">Website</label>
+        <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off" />
+      </div>
+      <input type="hidden" id="cf-loaded-at" name="loadedAt" />
+
+      <button type="submit" class="btn btn-primary" id="cf-submit">Send →</button>
+      <p class="form-status" id="cf-status" role="status" aria-live="polite"></p>
+    </form>
+
+    <p class="card-footnote">No sales team, no chatbot — just a person who'll actually read this.</p>
+  </main>
+
+  <script>
+    // ── THEME TOGGLE ───────────────────────────────────────────
+    (function () {
+      const STORAGE_KEY = 'mibe-theme';
+      const root   = document.documentElement;
+      const toggle = document.getElementById('theme-toggle');
+
+      function reflect(theme) {
+        if (theme === 'light') {
+          toggle.textContent = '☀️';
+          toggle.setAttribute('aria-label', 'Switch to dark theme');
+        } else {
+          toggle.textContent = '🌙';
+          toggle.setAttribute('aria-label', 'Switch to light theme');
+        }
+      }
+
+      reflect(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+
+      toggle.addEventListener('click', () => {
+        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        if (next === 'light') {
+          root.setAttribute('data-theme', 'light');
+        } else {
+          root.removeAttribute('data-theme');
+        }
+        localStorage.setItem(STORAGE_KEY, next);
+        reflect(next);
+      });
+    })();
+
+    // ── CURSOR ─────────────────────────────────────────────────
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top  = my + 'px';
+    });
+    function animateRing() {
+      rx += (mx - rx) * 0.12;
+      ry += (my - ry) * 0.12;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    // hide cursor on mobile
+    if ('ontouchstart' in window) {
+      cursor.style.display = 'none';
+      ring.style.display   = 'none';
+      document.body.style.cursor = 'auto';
+    }
+
+    // ── CONTACT FORM ───────────────────────────────────────────
+    (function () {
+      const WORKER_URL           = 'https://mibe-contact-form.mikey-a2c.workers.dev/';
+      const MIN_FILL_MS          = 3000;  // faster than this and no human read the page
+      const RESUBMIT_COOLDOWN_MS = 30000;
+
+      const form           = document.getElementById('contact-form');
+      const status         = document.getElementById('cf-status');
+      const submitBtn      = document.getElementById('cf-submit');
+      const loadedAtField  = document.getElementById('cf-loaded-at');
+      const honeypot       = document.getElementById('cf-website');
+      const sourceField    = document.getElementById('cf-source');
+
+      loadedAtField.value = Date.now();
+
+      function setStatus(msg, kind) {
+        status.textContent = msg;
+        status.className = 'form-status' + (kind ? ' ' + kind : '');
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // honeypot tripped — only a bot would have filled a field that's
+        // hidden from real users. Pretend it worked so it doesn't learn
+        // to leave the field blank next time.
+        if (honeypot.value.trim() !== '') {
+          form.reset();
+          loadedAtField.value = Date.now();
+          setStatus("Message sent. Thanks — expect a reply soon.", 'success');
+          return;
+        }
+
+        // submitted faster than a human could plausibly read the page and
+        // type a name, email and message
+        if (Date.now() - parseInt(loadedAtField.value, 10) < MIN_FILL_MS) {
+          form.reset();
+          loadedAtField.value = Date.now();
+          setStatus("Message sent. Thanks — expect a reply soon.", 'success');
+          return;
+        }
+
+        const lastSubmit = parseInt(localStorage.getItem('mibe-contact-last-submit') || '0', 10);
+        if (Date.now() - lastSubmit < RESUBMIT_COOLDOWN_MS) {
+          setStatus('Already sent — give it a moment before sending another.', 'error');
+          return;
+        }
+
+        const payload = {
+          name:     document.getElementById('cf-name').value.trim(),
+          email:    document.getElementById('cf-email').value.trim(),
+          message:  document.getElementById('cf-message').value.trim(),
+          website:  honeypot.value,
+          loadedAt: parseInt(loadedAtField.value, 10),
+          source:   sourceField.value,
+        };
+
+        submitBtn.disabled = true;
+        setStatus('Sending…');
+
+        try {
+          const res = await fetch(WORKER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          if (!res.ok) throw new Error('bad status');
+
+          localStorage.setItem('mibe-contact-last-submit', String(Date.now()));
+          form.reset();
+          loadedAtField.value = Date.now();
+          setStatus("Message sent. Thanks — expect a reply soon.", 'success');
+        } catch (err) {
+          setStatus('Something went wrong — email mikey@mibe.uk directly instead.', 'error');
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -946,6 +946,61 @@
       cursor: none;
     }
 
+    /* ─── CARD PAGE (mibe.uk/hello — QR/business-card landing) ── */
+    .card-theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 100;
+    }
+    .card-hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: 440px;
+      margin: 0 auto;
+      padding: 100px 24px 60px;
+    }
+    .card-mark {
+      width: clamp(40px, 10vw, 56px);
+      height: auto;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fade-up 0.6s ease forwards 0.1s;
+    }
+    .card-title {
+      font-family: var(--font-logo);
+      font-size: clamp(32px, 8vw, 48px);
+      font-weight: 400;
+      color: var(--orange);
+      line-height: 1;
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: fade-up 0.6s ease forwards 0.25s;
+    }
+    .card-sub {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 360px;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fade-up 0.6s ease forwards 0.4s;
+    }
+    .card-form {
+      width: 100%;
+      opacity: 0;
+      animation: fade-up 0.6s ease forwards 0.55s;
+    }
+    .card-footnote {
+      margin-top: 32px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      color: var(--muted);
+      opacity: 0;
+      animation: fade-up 0.6s ease forwards 0.7s;
+    }
+
     /* ─── MISC UTILITIES ─────────────────────────────────────── */
     .highlight { color: var(--orange); }
     hr.divider {
