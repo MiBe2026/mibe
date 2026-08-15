@@ -10,6 +10,22 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script>
+    // applied before first paint so the page never flashes the wrong theme
+    (function () {
+      if (localStorage.getItem('mibe-theme') === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+      }
+    })();
+
+    // stop the browser from silently restoring a scrolled-down position on
+    // reload / back-forward nav — a fresh load should start at the top
+    // (direct links to a #section still work; that's a separate, unrelated
+    // browser behaviour driven by the URL hash, not by history state)
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+  </script>
 </head>
 <body>
 
@@ -42,6 +58,7 @@
       <li><a href="#ipos">ipos</a></li>
       <li><a href="#contact">contact</a></li>
     </ul>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light theme">🌙</button>
   </nav>
 
   <!-- HERO -->
@@ -303,6 +320,36 @@
   </footer>
 
   <script>
+    // ── THEME TOGGLE ───────────────────────────────────────────
+    (function () {
+      const STORAGE_KEY = 'mibe-theme';
+      const root   = document.documentElement;
+      const toggle = document.getElementById('theme-toggle');
+
+      function reflect(theme) {
+        if (theme === 'light') {
+          toggle.textContent = '☀️';
+          toggle.setAttribute('aria-label', 'Switch to dark theme');
+        } else {
+          toggle.textContent = '🌙';
+          toggle.setAttribute('aria-label', 'Switch to light theme');
+        }
+      }
+
+      reflect(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+
+      toggle.addEventListener('click', () => {
+        const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        if (next === 'light') {
+          root.setAttribute('data-theme', 'light');
+        } else {
+          root.removeAttribute('data-theme');
+        }
+        localStorage.setItem(STORAGE_KEY, next);
+        reflect(next);
+      });
+    })();
+
     // ── CURSOR ─────────────────────────────────────────────────
     const cursor = document.getElementById('cursor');
     const ring   = document.getElementById('cursor-ring');

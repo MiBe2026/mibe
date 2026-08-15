@@ -14,8 +14,39 @@
       --green-dim:  rgba(47,168,79,0.14);
       --green-glow: rgba(47,168,79,0.35);
       --orange:     #C1541C;
+      --on-green:   #1a1a1a;
+      --on-orange:  #ffffff;
+      --nav-bg:     rgba(26,26,26,0.85);
       --font-display: Arial, Helvetica, sans-serif;
       --font-logo:    'Press Start 2P', 'JetBrains Mono', monospace;
+    }
+
+    /* ─── LIGHT THEME — MiBe Brand Guidelines v3.1 palette ──────
+       Terminal Green / Burnt Orange stay exactly as spec'd on both
+       light and dark (the guide fixes them as brand constants — the
+       wordmark orange explicitly "doesn't follow the background").
+       White + Light Grey + Charcoal + Slate are the light-side
+       neutrals from the same guide (Slate via Style Guide v1.2). */
+    :root[data-theme="light"] {
+      --bg:         #ffffff;
+      --bg2:        #f4f4f5;
+      --surface:    #ffffff;
+      --border:     #e4e4e7;
+      --text:       #1a1a1a;
+      --muted:      #6b7280;
+      --green:      #2FA84F;
+      --green-dim:  rgba(47,168,79,0.12);
+      --green-glow: rgba(47,168,79,0.35);
+      --orange:     #C1541C;
+      --on-green:   #1a1a1a;
+      --on-orange:  #ffffff;
+      --nav-bg:     rgba(255,255,255,0.85);
+    }
+    /* screen-blend cursor dot relies on a dark backdrop to stay visible —
+       on light backgrounds it would blend out to invisible, so switch it
+       back to a normal, always-opaque blend */
+    :root[data-theme="light"] #cursor {
+      mix-blend-mode: normal;
     }
 
     /* ─── RESET ──────────────────────────────────────────────── */
@@ -86,7 +117,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(26,26,26,0.85);
+      background: var(--nav-bg);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
@@ -94,6 +125,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      margin-right: auto;
     }
     .nav-mark img { width: 44px; height: 32px; display: block; }
     .nav-wordmark {
@@ -128,6 +160,30 @@
       transition: color 0.2s;
     }
     .nav-links a:hover { color: var(--green); text-decoration: none; }
+
+    /* ─── THEME TOGGLE ───────────────────────────────────────── */
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      margin-left: 20px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 15px;
+      line-height: 1;
+      cursor: none;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .theme-toggle:hover {
+      border-color: var(--green);
+      transform: translateY(-1px);
+    }
+    @media (max-width: 600px) {
+      .theme-toggle { margin-left: 12px; }
+    }
 
     /* mobile nav */
     .nav-toggle {
@@ -260,7 +316,7 @@
     }
     .btn-primary {
       background: var(--green);
-      color: var(--bg);
+      color: var(--on-green);
       font-weight: 700;
     }
     .btn-primary:hover {
@@ -506,14 +562,14 @@
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.03em;
-      color: #000;
+      color: var(--on-orange);
       background: var(--orange);
       padding: 3px 10px;
       border-radius: 2px;
     }
     .milestone-tag.green {
       background: var(--green);
-      color: var(--bg);
+      color: var(--on-green);
     }
 
 
@@ -741,7 +797,7 @@
     #konami-overlay .close-btn {
       margin-top: 16px;
       background: #000;
-      color: var(--orange);
+      color: #C1541C;
       border: none;
       padding: 12px 24px;
       font-family: var(--font-display);
