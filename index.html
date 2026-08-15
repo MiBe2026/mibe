@@ -532,11 +532,19 @@
       // gets to be dramatic
       const rightCap = 16;
 
+      // the "margin over there" assumption only holds on wide viewports —
+      // the container hugs the edge on narrow/mobile widths, so the left
+      // swing has to be capped by how much room is actually available or
+      // it gets clipped by body's overflow-x: hidden
+      const svgLeftInViewport = wrapRect.left - 6;
+      const edgeMargin = 8; // breathing room from the viewport edge
+      const leftCap = Math.max(4, svgLeftInViewport - edgeMargin + cx);
+
       const verts = [{ x: cx, y: 0 }, { x: cx, y: chaoStart }];
       for (let i = 0; i < steps; i++) {
         const y    = chaoStart + (i + 0.5) * segH;
         const w    = zigW * amp[i % amp.length];
-        const side = i % 2 === 0 ? cx - w : cx + Math.min(w, rightCap);
+        const side = i % 2 === 0 ? cx - Math.min(w, leftCap) : cx + Math.min(w, rightCap);
         verts.push({ x: side, y });
       }
       verts.push({ x: cx, y: chaoEnd });
