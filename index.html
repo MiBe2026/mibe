@@ -53,9 +53,11 @@
       <span></span><span></span><span></span>
     </button>
     <ul class="nav-links">
-      <li><a href="#about">about</a></li>
+      <li><a href="#about">the brand</a></li>
+      <li><a href="#facts">the person</a></li>
       <li><a href="#timeline">timeline</a></li>
       <li><a href="#ipos">ipos</a></li>
+      <li><a href="#future">future projects</a></li>
       <li><a href="#contact">contact</a></li>
     </ul>
     <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light theme">🌙</button>
@@ -72,7 +74,7 @@
       </div>
       <p class="hero-sub">
         <strong>Jack of all, master of none.</strong><br/>
-        Computer scientist turned material controller.
+        Computer scientist turned material controller... plus hobby coder.<br/>
       </p>
       <div class="hero-cta">
         <a href="#ipos" class="btn btn-primary">See IPOS →</a>
@@ -90,37 +92,60 @@
   <!-- ABOUT -->
   <section id="about">
     <div class="container">
-      <p class="section-label reveal">// about</p>
-      <h2 class="section-title reveal reveal-delay-1">The MiBe philosophy.</h2>
-      <div class="about-grid">
-        <div class="about-text reveal reveal-delay-2">
-          <p>
-            MiBe strives for perfection in everything it commits to. Alas, perfection can often be unobtainable. Where this is the case, the philosophy changes into something that makes everything achievable. To quote the massively
-            inflencial and critically acclaimed piece of literature by Doctor Ray Bennet:
-          </p>
-          <div class="aside">
-            "Good enough is good enough"<br/>
-            The Underachievers Manifesto
-          </div>
-
+      <p class="section-label reveal">// brand</p>
+      <h2 class="section-title reveal reveal-delay-1">About the brand.</h2>
+      <div class="about-text-solo reveal reveal-delay-2">
+        <p>
+          MiBe's standard is to deliver the best achievable outcome on every commitment.
+          Where perfection isn't practical, the focus shifts to what is genuinely achievable and delivering that well.
+        </p>
+        <div class="aside">
+          Good enough is good enough, but only if it's actually good enough.
         </div>
-        <div class="about-stats reveal reveal-delay-3">
-          <div class="stat-card">
-            <div class="stat-number">School</div>
-            <div class="stat-label">GCSE Food Technology — peak academia</div>
-          </div>
-          <div class="stat-card food-tech" title="Hover for truth">
-            <div class="stat-number highlight">Uni</div>
-            <div class="stat-label">BEng (Hons) — International Computing Science</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number">Past</div>
-            <div class="stat-label">10 years in software before the boots</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-number highlight">Present</div>
-            <div class="stat-label">one person,<br/>one brand</div>
-          </div>
+        <p>
+          The offering is straightforward: websites, documents, and applications, built properly and handed over finished.
+          <a href="#ipos">IPOS</a> is the flagship project, but the same standard applies to anything MiBe takes on — from a one-page site to a full piece of software.
+        </p>
+        <p style="font-family:var(--font-display);font-size:12px;color:var(--muted);margin-top:24px;">
+          Built with <a href="https://claude.ai" target="_blank" rel="noopener">Claude.ai</a> and
+          <a href="https://claude.com/product/claude-code" target="_blank" rel="noopener">Claude Code</a> doing the typing.
+          The bad decisions are still all MiBe's own.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- QUICK FACTS -->
+  <section id="facts">
+    <div class="container">
+      <p class="section-label reveal">// individual</p>
+      <h2 class="section-title reveal reveal-delay-1">About the person.</h2>
+      <div class="about-stats quick-facts reveal reveal-delay-2">
+        <div class="stat-card">
+          <div class="stat-number">Born</div>
+          <div class="stat-label"><span class="stat-subtitle">Stafford General</span><span class="stat-explain">Pre-dating the NHS scandal</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">Raised</div>
+          <div class="stat-label"><span class="stat-subtitle">Wolverhampton</span><span class="stat-explain">Proper Black Country</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">School</div>
+          <div class="stat-label"><span class="stat-subtitle">GCSE Food Technology</span><span class="stat-explain">Peak academia</span></div>
+        </div>
+        <div class="stat-card food-tech" title="Hover for truth">
+          <div class="stat-number">Uni</div>
+          <div class="stat-label"><span class="stat-subtitle">BEng (Hons)</span><span class="stat-explain">International Computing Science</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">Contracting</div>
+          <div class="stat-label"><span class="stat-subtitle">UK &amp; Europe</span><span class="stat-explain">Beer sampled in many countries</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">Builder</div>
+          <div class="stat-label"><span class="stat-subtitle">Shropshire</span><span class="stat-explain">The current base of operations</span></div>
         </div>
       </div>
     </div>
@@ -161,7 +186,7 @@
             which is the respectable way of saying student life was enjoyed.<br/>
             A year off first. No regrets.
           </p>
-          <span class="milestone-tag green">🎓 2:2 and proud</span>
+          <span class="milestone-tag">🎓 2:2 and proud</span>
         </div>
 
         <div class="milestone" data-delay="200">
@@ -172,7 +197,7 @@
             Started on a graduate scheme doing software testing for a company that makes headlines for all the wrong reasons.
             Did that for two years, finished it, then went contracting. Financial institutions, mostly. Success came at a price though...
           </p>
-          <span class="milestone-tag green">🔥 everything wasn't ok</span>
+          <span class="milestone-tag">🔥 everything wasn't ok</span>
         </div>
 
         <div class="milestone pivot" data-delay="300">
@@ -231,7 +256,8 @@
         Materials management on construction sites is a mess.<br/>
         Spreadsheets. WhatsApp. Guesswork.<br/>
         IPOS is what happens when a software engineer gets a CSCS card<br/>
-        and decides to actually fix the problem.
+        and decides to actually fix the problem. <br/>
+        This is MiBe's first long term project.
       </p>
 
       <div class="ipos-grid">
@@ -255,6 +281,42 @@
       <div class="ipos-wip reveal" style="margin-top:40px;">
         <div class="wip-dot"></div>
         <span>Currently in development.</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider" />
+
+  <!-- FUTURE PROJECTS -->
+  <section id="future">
+    <div class="container">
+      <p class="section-label reveal">// future</p>
+      <h2 class="section-title reveal reveal-delay-1">Future projects.</h2>
+      <p class="ipos-hero-line reveal reveal-delay-2">
+        <!-- TODO: write me -->
+      </p>
+
+      <div class="ipos-grid">
+        <div class="ipos-card reveal">
+          <div class="ipos-card-icon">🧪</div>
+          <h3 class="ipos-card-title">Hobby projects</h3>
+          <p class="ipos-card-body">
+            When a genuinely interesting idea comes up, it gets built. If it works, maybe it'll be useful to someone else too.
+          </p>
+        </div>
+        <div class="ipos-card reveal reveal-delay-1">
+          <div class="ipos-card-icon">🤝</div>
+          <h3 class="ipos-card-title">Freelance work</h3>
+          <p class="ipos-card-body">
+            Have an idea but don't know how to build it? That's what MiBe is for. No marketing, no sales pitch — just the thing that makes the idea real.
+          </p>
+        </div>
+        <div class="ipos-card reveal reveal-delay-2">
+          <div class="ipos-card-icon">🔗</div>
+          <h3 class="ipos-card-title">Sample work</h3>
+          <p class="ipos-card-body">
+            Coming soon...
+        </div>
       </div>
     </div>
   </section>
@@ -315,7 +377,7 @@
       © 2026 <span>MiBe</span>. Built by one person. Hosted for free. No tracking. No cookies. No bullshit.
     </div>
     <div class="footer-right">
-      v1.0 — made with ☕ and spite
+      v2.7 — made with ☕ and spite
     </div>
   </footer>
 
@@ -489,7 +551,7 @@
         if (honeypot.value.trim() !== '') {
           form.reset();
           loadedAtField.value = Date.now();
-          setStatus("Message sent. Thanks — I'll get back to you.", 'success');
+          setStatus("Message sent. Thanks — expect a reply soon.", 'success');
           return;
         }
 
@@ -498,7 +560,7 @@
         if (Date.now() - parseInt(loadedAtField.value, 10) < MIN_FILL_MS) {
           form.reset();
           loadedAtField.value = Date.now();
-          setStatus("Message sent. Thanks — I'll get back to you.", 'success');
+          setStatus("Message sent. Thanks — expect a reply soon.", 'success');
           return;
         }
 
@@ -530,7 +592,7 @@
           localStorage.setItem('mibe-contact-last-submit', String(Date.now()));
           form.reset();
           loadedAtField.value = Date.now();
-          setStatus("Message sent. Thanks — I'll get back to you.", 'success');
+          setStatus("Message sent. Thanks — expect a reply soon.", 'success');
         } catch (err) {
           setStatus('Something went wrong — email mikey@mibe.uk directly instead.', 'error');
         } finally {
