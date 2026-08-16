@@ -115,7 +115,7 @@
           <div class="ipos-card reveal reveal-delay-1">
             <div class="ipos-card-icon">📄</div>
             <h3 class="ipos-card-title">Documents</h3>
-            <p class="ipos-card-body">Generated paperwork, reports, exportable output, reuseable templates — the boring stuff, done properly.</p>
+            <p class="ipos-card-body">Generated paperwork, reports, exportable output — the boring stuff, done properly.</p>
           </div>
           <div class="ipos-card reveal reveal-delay-2">
             <div class="ipos-card-icon">💻</div>
@@ -167,7 +167,7 @@
         </div>
         <div class="stat-card">
           <div class="stat-number">Contracting</div>
-          <div class="stat-label"><span class="stat-subtitle">UK &amp; Europe</span><span class="stat-explain">Beer sampled in many countries. Also did some work</span></div>
+          <div class="stat-label"><span class="stat-subtitle">UK &amp; Europe</span><span class="stat-explain">Beer sampled in many countries</span></div>
         </div>
         <div class="stat-card">
           <div class="stat-number">Builder</div>
@@ -356,31 +356,25 @@
         Three finished examples — each one its own fake brand, own stack, own feel. Click through to try them.
       </p>
 
-      <div class="terminal-window reveal reveal-delay-2">
-        <div class="terminal-titlebar">
-          <span class="terminal-dot terminal-dot-red"></span>
-          <span class="terminal-dot terminal-dot-amber"></span>
-          <span class="terminal-dot terminal-dot-green"></span>
-          <span class="terminal-title">sample-work — zsh</span>
+      <div class="tabs-window reveal reveal-delay-2">
+        <div class="tab-bar" id="sample-tab-bar" role="tablist"></div>
+        <div class="address-bar">
+          <div class="address-dots">
+            <span class="address-dot address-dot-red"></span>
+            <span class="address-dot address-dot-amber"></span>
+            <span class="address-dot address-dot-green"></span>
+          </div>
+          <div class="address-url" id="sample-address-url"></div>
+          <a class="open-live-link" id="sample-open-live" href="#" target="_blank" rel="noopener">Open live ↗</a>
         </div>
-        <div class="terminal-body">
-          <div class="terminal-line">
-            <span class="terminal-prompt">mibe@future:~$</span> ls -la ./sample-work
+        <div class="preview-pane">
+          <div class="preview-frame-wrap">
+            <div class="preview-loading" id="sample-preview-loading">loading preview…</div>
+            <iframe class="preview-frame" id="sample-preview-frame" title="Project preview"></iframe>
           </div>
-          <div class="terminal-entry">
-            <a class="terminal-project" href="/projects/loadbay/" target="_blank" rel="noopener">loadbay/</a>
-            <span class="terminal-comment"># materials call-off &amp; dispatch — generated documents, client-side state</span>
-          </div>
-          <div class="terminal-entry">
-            <a class="terminal-project" href="/projects/ember-oak/" target="_blank" rel="noopener">ember-oak/</a>
-            <span class="terminal-comment"># restaurant &amp; reservations — a completely different visual identity, live status</span>
-          </div>
-          <div class="terminal-entry">
-            <a class="terminal-project" href="/projects/lustre/" target="_blank" rel="noopener">lustre/</a>
-            <span class="terminal-comment"># salon booking flow — multi-step wizard, real slot-availability state</span>
-          </div>
-          <div class="terminal-line">
-            <span class="terminal-prompt">mibe@future:~$</span><span class="terminal-cursor"></span>
+          <div class="preview-caption">
+            <div class="preview-caption-title" id="sample-caption-title"></div>
+            <div class="preview-caption-body" id="sample-caption-body"></div>
           </div>
         </div>
       </div>
@@ -675,6 +669,103 @@
       }
 
       setTimeout(start, START_DELAY_MS);
+    })();
+
+    // ── SAMPLE WORK BROWSER TABS ────────────────────────────────
+    (function () {
+      const tabBar        = document.getElementById('sample-tab-bar');
+      if (!tabBar) return;
+
+      // edit here to add/remove/reorder sample projects
+      const PROJECTS = [
+        {
+          name: 'loadbay',
+          url: 'https://mibe.uk/projects/loadbay/',
+          accent: '#E8A63A',
+          description: 'materials call-off & dispatch — generated documents, client-side state'
+        },
+        {
+          name: 'ember-oak',
+          url: 'https://mibe.uk/projects/ember-oak/',
+          accent: '#B23A2E',
+          description: 'restaurant & reservations — a completely different visual identity, live status'
+        },
+        {
+          name: 'lustre',
+          url: 'https://mibe.uk/projects/lustre/',
+          accent: '#C9738A',
+          description: 'salon booking flow — multi-step wizard, real slot-availability state'
+        }
+      ];
+
+      const addressUrl     = document.getElementById('sample-address-url');
+      const openLive        = document.getElementById('sample-open-live');
+      const previewFrame    = document.getElementById('sample-preview-frame');
+      const previewLoading  = document.getElementById('sample-preview-loading');
+      const captionTitle    = document.getElementById('sample-caption-title');
+      const captionBody     = document.getElementById('sample-caption-body');
+
+      let activeIndex = 0;
+      let started = false;
+
+      function displayUrl(fullUrl) {
+        return fullUrl.replace(/^https?:\/\//, '');
+      }
+
+      function renderTabs() {
+        tabBar.innerHTML = '';
+        PROJECTS.forEach((p, i) => {
+          const tab = document.createElement('button');
+          tab.className = 'tab' + (i === activeIndex ? ' active' : '');
+          tab.setAttribute('role', 'tab');
+          tab.setAttribute('type', 'button');
+          tab.innerHTML = `<span class="tab-dot" style="background:${p.accent}"></span>${p.name}`;
+          tab.addEventListener('click', () => selectProject(i));
+          tabBar.appendChild(tab);
+        });
+      }
+
+      function selectProject(index) {
+        activeIndex = index;
+        const p = PROJECTS[index];
+
+        renderTabs();
+        addressUrl.textContent = displayUrl(p.url);
+        openLive.href = p.url;
+        captionTitle.textContent = p.name;
+        captionBody.textContent = p.description;
+
+        previewFrame.classList.remove('loaded');
+        previewLoading.classList.remove('hidden');
+        previewLoading.textContent = 'loading preview…';
+        previewFrame.src = p.url;
+
+        clearTimeout(previewFrame._timeoutId);
+        previewFrame._timeoutId = setTimeout(() => {
+          if (!previewFrame.classList.contains('loaded')) {
+            previewLoading.textContent = 'preview unavailable — use "open live" above';
+          }
+        }, 4000);
+      }
+
+      previewFrame.addEventListener('load', () => {
+        previewFrame.classList.add('loaded');
+        previewLoading.classList.add('hidden');
+      });
+
+      // don't load three iframes until the section is actually
+      // scrolled into view — no point paying for it on page load
+      const sectionObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting && !started) {
+            started = true;
+            renderTabs();
+            selectProject(0);
+            sectionObs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      sectionObs.observe(document.querySelector('.tabs-window'));
     })();
 
     // ── SCROLL REVEAL ──────────────────────────────────────────
