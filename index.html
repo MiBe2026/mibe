@@ -73,7 +73,7 @@
         <h1 class="hero-title">MiBe</h1>
       </div>
       <p class="hero-sub">
-        <strong class="hero-rotator-line">Technology for <span class="rotator-wrap"><span class="rotator" id="hero-rotator"></span><span class="rotator-cursor" id="hero-rotator-cursor"></span></span></strong><br/>
+        <strong class="hero-rotator-line">Technology for <span class="rotator-wrap"><span class="rotator" id="hero-rotator"><span id="hero-rotator-text"></span><span class="rotator-cursor" id="hero-rotator-cursor"></span></span></span></strong><br/>
         Computer scientist turned material controller... plus hobby coder.<br/>
       </p>
       <div class="hero-cta">
@@ -504,9 +504,10 @@
 
     // ── HERO ROTATING WORD (typewriter, with the odd typo) ─────
     (function () {
-      const container = document.getElementById('hero-rotator');
+      const outerEl  = document.getElementById('hero-rotator');
+      const container = document.getElementById('hero-rotator-text');
       const cursorEl   = document.getElementById('hero-rotator-cursor');
-      if (!container) return;
+      if (!outerEl || !container) return;
 
       // edit this list to change what MiBe is "built for"
       const INDUSTRIES = [
@@ -560,8 +561,8 @@
           widest = Math.max(widest, measure.getBoundingClientRect().width);
         });
         document.body.removeChild(measure);
-        container.style.display = 'inline-block';
-        container.style.minWidth = widest + 'px';
+        outerEl.style.display = 'inline-block';
+        outerEl.style.minWidth = widest + 'px';
       }
 
       function typeWord(word, cb) {
