@@ -33,6 +33,9 @@
   <div id="cursor"></div>
   <div id="cursor-ring"></div>
 
+  <!-- Grain overlay -->
+  <div class="grain-overlay" aria-hidden="true"></div>
+
   <!-- Konami overlay -->
   <div id="konami-overlay">
     <h2>🦺 You found the hard hat.</h2>
@@ -126,6 +129,21 @@
             <div class="ipos-card-icon">🛠️</div>
             <h3 class="ipos-card-title">IT support</h3>
             <p class="ipos-card-body">Domain registration, email set up, general technical support — the stuff that eats an afternoon if you don't already know it.</p>
+          </div>
+        </div>
+
+        <div class="count-stats-grid reveal reveal-delay-3">
+          <div class="stat-card count-stat-card">
+            <div class="stat-number count-stat-number" data-count-target="0" data-count-source="github-commits">0</div>
+            <div class="stat-label">Commits pushed to this site</div>
+          </div>
+          <div class="stat-card count-stat-card">
+            <div class="stat-number count-stat-number" data-count-target="640">0</div>
+            <div class="stat-label">Cups of coffee (estimated, generously)</div>
+          </div>
+          <div class="stat-card count-stat-card">
+            <div class="stat-number count-stat-number" data-count-target="12">0</div>
+            <div class="stat-label">Excuses used, all valid</div>
           </div>
         </div>
 
@@ -440,6 +458,7 @@
   <footer>
     <div class="footer-left">
       © 2026 <span>MiBe</span>. Built by one person. Hosted for free. No tracking. No cookies. No bullshit.
+      <div class="commit-ticker" id="commit-ticker">checking the last commit…</div>
     </div>
     <div class="footer-right">
       v2.7 — made with ☕ and spite
@@ -501,6 +520,30 @@
       ring.style.display   = 'none';
       document.body.style.cursor = 'auto';
     }
+
+    // ── MAGNETIC BUTTONS ─────────────────────────────────────────
+    // .btn already has a custom cursor and `transition: all 0.2s`, so
+    // this piggybacks on that existing transition for the pull/release
+    (function () {
+      const isTouch = 'ontouchstart' in window;
+      const prefersReducedMotionMag = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (isTouch || prefersReducedMotionMag) return;
+
+      const MAGNETIC_STRENGTH = 0.35;
+      const MAGNETIC_RADIUS_PAD = 0; // extend pull past the button's own edges if ever wanted
+
+      document.querySelectorAll('.btn').forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+          const rect = el.getBoundingClientRect();
+          const relX = e.clientX - rect.left - rect.width / 2;
+          const relY = e.clientY - rect.top - rect.height / 2;
+          el.style.transform = `translate(${relX * MAGNETIC_STRENGTH}px, ${relY * MAGNETIC_STRENGTH}px)`;
+        });
+        el.addEventListener('mouseleave', () => {
+          el.style.transform = '';
+        });
+      });
+    })();
 
     // ── HERO ROTATING WORD (typewriter, with the odd typo) ─────
     (function () {
@@ -767,6 +810,127 @@
         });
       }, { threshold: 0.1 });
       sectionObs.observe(document.querySelector('.tabs-window'));
+    })();
+
+    // ── COUNT-UP STATS + GITHUB COMMIT TICKER ───────────────────
+    (function () {
+      const countEls = document.querySelectorAll('.count-stat-number');
+      if (!countEls.length) return;
+
+      const prefersReducedMotionCount = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function animateCount(el, target) {
+        if (prefersReducedMotionCount) {
+          el.textContent = target.toLocaleString();
+          return;
+        }
+        const duration = 1200;
+        const start = performance.now();
+        function tick(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+          el.textContent = Math.round(target * eased).toLocaleString();
+          if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+
+      // count-up runs once an element is scrolled into view. The GitHub
+      // stat is a special case — it might come into view before the API
+      // call resolves, so it just marks itself as "wants to animate" and
+      // waits for the fetch below to flip it ready.
+      const countObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          const el = e.target;
+          if (el.dataset.countSource === 'github-commits' && el.dataset.countReady !== '1') {
+            el.dataset.countWantsAnimate = '1';
+            return;
+          }
+          animateCount(el, parseInt(el.dataset.countTarget, 10) || 0);
+          countObs.unobserve(el);
+        });
+      }, { threshold: 0.4 });
+      countEls.forEach(el => countObs.observe(el));
+
+      // ── GitHub stats (feeds both the commit-count stat and the footer ticker)
+      const GH_OWNER = 'mibe2026';
+      const GH_REPO  = 'mibe';
+      const CACHE_KEY = 'mibe:gh-stats-cache';
+      const CACHE_TTL_MS = 30 * 60 * 1000; // 30 min — keeps calls well under the unauthenticated rate limit
+
+      function relativeTime(dateStr) {
+        const diffMs = Date.now() - new Date(dateStr).getTime();
+        const mins = Math.round(diffMs / 60000);
+        if (mins < 1) return 'just now';
+        if (mins < 60) return `${mins}m ago`;
+        const hrs = Math.round(mins / 60);
+        if (hrs < 24) return `${hrs}h ago`;
+        const days = Math.round(hrs / 24);
+        if (days < 30) return `${days}d ago`;
+        return `${Math.round(days / 30)}mo ago`;
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+      }
+
+      async function fetchGithubStats() {
+        try {
+          const cached = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
+          if (cached && Date.now() - cached.fetchedAt < CACHE_TTL_MS) return cached;
+        } catch (e) { /* corrupt cache, ignore and refetch */ }
+
+        const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/commits?per_page=1`);
+        if (!res.ok) throw new Error('github fetch failed');
+        const commits = await res.json();
+        const latest = commits[0];
+
+        // Link-header trick: at per_page=1, the "last" page number equals
+        // the total commit count on the default branch
+        let totalCommits = 1;
+        const linkHeader = res.headers.get('Link');
+        if (linkHeader) {
+          const match = linkHeader.match(/[?&]page=(\d+)>; rel="last"/);
+          if (match) totalCommits = parseInt(match[1], 10);
+        }
+
+        const data = {
+          message: latest.commit.message.split('\n')[0],
+          url: latest.html_url,
+          date: latest.commit.committer.date,
+          totalCommits,
+          fetchedAt: Date.now(),
+        };
+        try { sessionStorage.setItem(CACHE_KEY, JSON.stringify(data)); } catch (e) { /* storage full/unavailable, skip caching */ }
+        return data;
+      }
+
+      const ticker        = document.getElementById('commit-ticker');
+      const githubStatEl  = document.querySelector('.count-stat-number[data-count-source="github-commits"]');
+
+      fetchGithubStats().then(data => {
+        if (ticker) {
+          ticker.innerHTML = `Last commit ${relativeTime(data.date)}: <a href="${data.url}" target="_blank" rel="noopener">"${escapeHtml(data.message)}"</a>`;
+        }
+        if (githubStatEl) {
+          githubStatEl.dataset.countTarget = String(data.totalCommits);
+          githubStatEl.dataset.countReady = '1';
+          if (githubStatEl.dataset.countWantsAnimate === '1') {
+            animateCount(githubStatEl, data.totalCommits);
+          }
+        }
+      }).catch(() => {
+        if (ticker) ticker.textContent = 'Couldn\u2019t reach GitHub just now — rate limited, probably. Typical.';
+        if (githubStatEl) {
+          githubStatEl.dataset.countReady = '1';
+          const card = githubStatEl.closest('.count-stat-card');
+          if (card) card.style.opacity = '0.5';
+          if (githubStatEl.dataset.countWantsAnimate === '1') {
+            animateCount(githubStatEl, 0);
+          }
+        }
+      });
     })();
 
     // ── SCROLL REVEAL ──────────────────────────────────────────
