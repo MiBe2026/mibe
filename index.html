@@ -73,7 +73,7 @@
         <h1 class="hero-title">MiBe</h1>
       </div>
       <p class="hero-sub">
-        <strong>Jack of all, master of none.</strong><br/>
+        <strong class="hero-rotator-line">Technology for <span class="rotator-wrap"><span class="rotator" id="hero-rotator"></span><span class="rotator-cursor" id="hero-rotator-cursor"></span></span></strong><br/>
         Computer scientist turned material controller... plus hobby coder.<br/>
       </p>
       <div class="hero-cta">
@@ -507,6 +507,175 @@
       ring.style.display   = 'none';
       document.body.style.cursor = 'auto';
     }
+
+    // ── HERO ROTATING WORD (typewriter, with the odd typo) ─────
+    (function () {
+      const container = document.getElementById('hero-rotator');
+      const cursorEl   = document.getElementById('hero-rotator-cursor');
+      if (!container) return;
+
+      // edit this list to change what MiBe is "built for"
+      const INDUSTRIES = [
+        'construction',
+        'retail',
+        'logistics',
+        'hospitality',
+        'whatever you\u2019ve got'
+      ];
+
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // hero-sub itself starts its fade-up at 0.7s and takes 0.7s (see
+      // .hero-sub in style.css) — wait for that to land before typing
+      // starts, so the rotator never competes with the reveal animation
+      const START_DELAY_MS = 1500;
+
+      const TYPE_SPEED           = 55;
+      const DELETE_SPEED         = 32;
+      const PAUSE_AFTER_TYPE     = 1400;
+      const PAUSE_AFTER_DELETE   = 250;
+      const LAST_WORD_BONUS_MS   = 1200; // "whatever you've got" holds a beat longer
+
+      const TYPO_CHANCE       = 0.55;
+      const TYPO_MIN_WORD_LEN = 5;
+      const TYPO_CHARS        = 2;
+      const PAUSE_BEFORE_NOTICE = 260;
+      const NEARBY_KEYS = {
+        a: 'sq', b: 'vn', c: 'xv', d: 'sf', e: 'wr', f: 'dg', g: 'fh',
+        h: 'gj', i: 'ou', j: 'hk', k: 'jl', l: 'k', m: 'n', n: 'bm',
+        o: 'ip', p: 'o', q: 'wa', r: 'et', s: 'ad', t: 'ry', u: 'yi',
+        v: 'cb', w: 'qe', x: 'zc', y: 'tu', z: 'x', ' ': ' ', '\u2019': '\u2019'
+      };
+
+      function typoCharFor(realChar) {
+        const options = NEARBY_KEYS[realChar.toLowerCase()] || 'x';
+        const pick = options[Math.floor(Math.random() * options.length)];
+        return realChar === realChar.toUpperCase() ? pick.toUpperCase() : pick;
+      }
+
+      function reserveWidth() {
+        const measure = document.createElement('span');
+        measure.style.position = 'absolute';
+        measure.style.visibility = 'hidden';
+        measure.style.whiteSpace = 'nowrap';
+        measure.style.font = window.getComputedStyle(container).font;
+        document.body.appendChild(measure);
+        let widest = 0;
+        INDUSTRIES.forEach(word => {
+          measure.textContent = word;
+          widest = Math.max(widest, measure.getBoundingClientRect().width);
+        });
+        document.body.removeChild(measure);
+        container.style.display = 'inline-block';
+        container.style.minWidth = widest + 'px';
+      }
+
+      function typeWord(word, cb) {
+        const willTypo = word.length >= TYPO_MIN_WORD_LEN && Math.random() < TYPO_CHANCE;
+        const typoAt = willTypo
+          ? Math.floor(word.length * 0.35) + Math.floor(Math.random() * (word.length * 0.3))
+          : -1;
+
+        let i = 0;
+
+        function typeCorrect() {
+          (function tick() {
+            container.textContent = word.slice(0, i);
+            i++;
+            if (i <= word.length) {
+              setTimeout(tick, TYPE_SPEED);
+            } else {
+              cb();
+            }
+          })();
+        }
+
+        (function tick() {
+          container.textContent = word.slice(0, i);
+
+          if (i === typoAt) {
+            let wrong = '';
+            for (let k = 0; k < TYPO_CHARS; k++) {
+              wrong += typoCharFor(word[Math.min(i + k, word.length - 1)]);
+            }
+            const correctSoFar = word.slice(0, i);
+            let w = 0;
+            (function typeWrong() {
+              container.textContent = correctSoFar + wrong.slice(0, w);
+              w++;
+              if (w <= wrong.length) {
+                setTimeout(typeWrong, TYPE_SPEED);
+              } else {
+                setTimeout(() => {
+                  let d = wrong.length;
+                  (function deleteWrong() {
+                    container.textContent = correctSoFar + wrong.slice(0, d);
+                    d--;
+                    if (d >= 0) {
+                      setTimeout(deleteWrong, DELETE_SPEED);
+                    } else {
+                      setTimeout(typeCorrect, TYPE_SPEED);
+                    }
+                  })();
+                }, PAUSE_BEFORE_NOTICE);
+              }
+            })();
+            return;
+          }
+
+          i++;
+          if (i <= word.length) {
+            setTimeout(tick, TYPE_SPEED);
+          } else {
+            cb();
+          }
+        })();
+      }
+
+      function deleteWord(word, cb) {
+        let i = word.length;
+        (function tick() {
+          container.textContent = word.slice(0, i);
+          i--;
+          if (i >= 0) {
+            setTimeout(tick, DELETE_SPEED);
+          } else {
+            cb();
+          }
+        })();
+      }
+
+      let index = 0;
+      function cycle() {
+        const word = INDUSTRIES[index];
+        const isLast = index === INDUSTRIES.length - 1;
+        typeWord(word, () => {
+          setTimeout(() => {
+            deleteWord(word, () => {
+              index = (index + 1) % INDUSTRIES.length;
+              setTimeout(cycle, PAUSE_AFTER_DELETE);
+            });
+          }, PAUSE_AFTER_TYPE + (isLast ? LAST_WORD_BONUS_MS : 0));
+        });
+      }
+
+      function start() {
+        reserveWidth();
+        if (prefersReducedMotion) {
+          if (cursorEl) cursorEl.style.display = 'none';
+          let i = 0;
+          (function step() {
+            container.textContent = INDUSTRIES[i];
+            i = (i + 1) % INDUSTRIES.length;
+            setTimeout(step, PAUSE_AFTER_TYPE + 900);
+          })();
+          return;
+        }
+        cycle();
+      }
+
+      setTimeout(start, START_DELAY_MS);
+    })();
 
     // ── SCROLL REVEAL ──────────────────────────────────────────
     const reveals = document.querySelectorAll('.reveal');

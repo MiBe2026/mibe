@@ -293,6 +293,28 @@
       animation: fade-up 0.7s ease forwards 0.7s;
     }
     .hero-sub strong { color: var(--text); font-weight: 700; }
+    .hero-rotator-line { color: var(--text); }
+    .rotator-wrap { display: inline-flex; align-items: baseline; }
+    .rotator {
+      color: var(--orange);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .rotator-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 0.9em;
+      background: var(--orange);
+      margin-left: 2px;
+      transform: translateY(0.1em);
+      animation: rotator-blink 0.9s steps(1) infinite;
+    }
+    @keyframes rotator-blink {
+      50% { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rotator-cursor { animation: none; }
+    }
     .hero-cta {
       margin-top: 48px;
       display: flex;
