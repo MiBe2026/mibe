@@ -131,18 +131,18 @@
           </div>
         </div>
 
-        <div class="count-stats-grid reveal reveal-delay-3">
-          <div class="stat-card count-stat-card">
-            <div class="stat-number count-stat-number" data-count-target="0" data-count-source="github-commits">0</div>
-            <div class="stat-label">Commits pushed to this site</div>
+        <div class="stat-strip reveal reveal-delay-3">
+          <div class="stat-strip-item">
+            <div class="stat-strip-number count-stat-number" data-count-target="0" data-count-source="github-commits">0</div>
+            <div class="stat-strip-label">Commits pushed to this site</div>
           </div>
-          <div class="stat-card count-stat-card">
-            <div class="stat-number count-stat-number" data-count-target="640">0</div>
-            <div class="stat-label">Cups of coffee (estimated, generously)</div>
+          <div class="stat-strip-item">
+            <div class="stat-strip-number count-stat-number" data-count-target="640">0</div>
+            <div class="stat-strip-label">Cups of coffee (estimated, generously)</div>
           </div>
-          <div class="stat-card count-stat-card">
-            <div class="stat-number count-stat-number" data-count-target="12">0</div>
-            <div class="stat-label">Excuses used, all valid</div>
+          <div class="stat-strip-item">
+            <div class="stat-strip-number count-stat-number" data-count-target="12">0</div>
+            <div class="stat-strip-label">Excuses used, all valid</div>
           </div>
         </div>
 
@@ -165,30 +165,30 @@
     <div class="container">
       <p class="section-label reveal">// mikey</p>
       <h2 class="section-title reveal reveal-delay-1">About the person.</h2>
-      <div class="about-stats quick-facts reveal reveal-delay-2">
-        <div class="stat-card">
-          <div class="stat-number">Born</div>
-          <div class="stat-label"><span class="stat-subtitle">Stafford General</span><span class="stat-explain">Pre-dating the NHS scandal</span></div>
+      <div class="dossier reveal reveal-delay-2">
+        <div class="dossier-row">
+          <span class="dossier-label">Born</span>
+          <span class="dossier-value">Stafford General<span class="dossier-note">Pre-dating the NHS scandal</span></span>
         </div>
-        <div class="stat-card">
-          <div class="stat-number">Raised</div>
-          <div class="stat-label"><span class="stat-subtitle">Wolverhampton</span><span class="stat-explain">Proper Black Country</span></div>
+        <div class="dossier-row">
+          <span class="dossier-label">Raised</span>
+          <span class="dossier-value">Wolverhampton<span class="dossier-note">Proper Black Country</span></span>
         </div>
-        <div class="stat-card">
-          <div class="stat-number">School</div>
-          <div class="stat-label"><span class="stat-subtitle">GCSE Food Technology</span><span class="stat-explain">Peak academia</span></div>
+        <div class="dossier-row">
+          <span class="dossier-label">School</span>
+          <span class="dossier-value">GCSE Food Technology<span class="dossier-note">Peak academia</span></span>
         </div>
-        <div class="stat-card food-tech" title="Hover for truth">
-          <div class="stat-number">Uni</div>
-          <div class="stat-label"><span class="stat-subtitle">BEng (Hons)</span><span class="stat-explain">International Computing Science</span></div>
+        <div class="dossier-row">
+          <span class="dossier-label food-tech" title="Hover for truth">Uni</span>
+          <span class="dossier-value">BEng (Hons)<span class="dossier-note">International Computing Science</span></span>
         </div>
-        <div class="stat-card">
-          <div class="stat-number">Contracting</div>
-          <div class="stat-label"><span class="stat-subtitle">UK &amp; Europe</span><span class="stat-explain">Beer sampled in many countries</span></div>
+        <div class="dossier-row">
+          <span class="dossier-label">Contracting</span>
+          <span class="dossier-value">UK &amp; Europe<span class="dossier-note">Software tested and beer sampled in many countries</span></span>
         </div>
-        <div class="stat-card">
-          <div class="stat-number">Builder</div>
-          <div class="stat-label"><span class="stat-subtitle">Shropshire</span><span class="stat-explain">The current base of operations</span></div>
+        <div class="dossier-row">
+          <span class="dossier-label">Builder</span>
+          <span class="dossier-value">Shropshire<span class="dossier-note">The current base of operations</span></span>
         </div>
       </div>
     </div>
@@ -298,15 +298,16 @@
         Ideas MiBe wants to build next — plus a few finished examples of what "built by MiBe" actually looks like.
       </p>
 
-      <div class="ipos-grid ipos-grid-2col">
-        <div class="ipos-card reveal">
+      <div class="split-panel">
+        <div class="split-panel-item reveal">
           <div class="ipos-card-icon">🧪</div>
           <h3 class="ipos-card-title">Hobby projects</h3>
           <p class="ipos-card-body">
             When a genuinely interesting idea comes up, it gets built. If it works, maybe it'll be useful to someone else too.
           </p>
         </div>
-        <div class="ipos-card reveal reveal-delay-1">
+        <div class="split-panel-divider" aria-hidden="true"></div>
+        <div class="split-panel-item reveal reveal-delay-1">
           <div class="ipos-card-icon">🤝</div>
           <h3 class="ipos-card-title">Freelance work</h3>
           <p class="ipos-card-body">
@@ -325,21 +326,34 @@
         and decides to actually fix the problem.
       </p>
 
-      <div class="ipos-grid" style="margin-top:20px;">
-        <div class="ipos-card reveal">
-          <div class="ipos-card-icon">📍</div>
-          <h3 class="ipos-card-title">Know where it is</h3>
-          <p class="ipos-card-body">Track materials on site in real time. Not "probably by the hoarding." Actually on site, on a timber rack, in a compound.</p>
+      <div class="feature-list" style="margin-top:20px;">
+        <div class="feature-row reveal">
+          <div class="feature-icon">📍</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Know where it is</h3>
+            <p class="feature-body">Track materials on site in real time. Not "probably by the hoarding." Actually on site, on a timber rack, in a compound.</p>
+          </div>
         </div>
-        <div class="ipos-card reveal reveal-delay-1">
-          <div class="ipos-card-icon">📦</div>
-          <h3 class="ipos-card-title">Know what you have</h3>
-          <p class="ipos-card-body">Deliveries logged. Stock tracked. No more walking the site to find those 30 lengths of CLS.</p>
+        <div class="feature-row reveal reveal-delay-1">
+          <div class="feature-icon">📦</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Know what you have</h3>
+            <p class="feature-body">Deliveries logged. Stock tracked. No more walking the site to find those 30 lengths of CLS.</p>
+          </div>
         </div>
-        <div class="ipos-card reveal reveal-delay-2">
-          <div class="ipos-card-icon">🔧</div>
-          <h3 class="ipos-card-title">Built by someone on site</h3>
-          <p class="ipos-card-body">Not an office lackey's idea of what site workers need.<br/>Built by a site worker, for site workers.</p>
+        <div class="feature-row reveal reveal-delay-2">
+          <div class="feature-icon">📋</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Know what should be used</h3>
+            <p class="feature-body">Materials checked against the material schedule, so what's sent to the tradie actually matches what the drawings call for.</p>
+          </div>
+        </div>
+        <div class="feature-row reveal reveal-delay-3">
+          <div class="feature-icon">🔧</div>
+          <div class="feature-content">
+            <h3 class="feature-title">Built by someone on site</h3>
+            <p class="feature-body">Not an office dwellers idea of what site workers need. Built by a site worker, for site workers.</p>
+          </div>
         </div>
       </div>
 
@@ -447,7 +461,7 @@
       <div class="commit-ticker" id="commit-ticker">checking the last commit…</div>
     </div>
     <div class="footer-right">
-      v42.069420 — made with ☕ and spite
+      v1337.420690 — made with ☕ and spite
     </div>
   </footer>
 
@@ -917,7 +931,7 @@
         if (ticker) ticker.textContent = 'Couldn\u2019t reach GitHub just now — rate limited, probably. Typical.';
         if (githubStatEl) {
           githubStatEl.dataset.countReady = '1';
-          const card = githubStatEl.closest('.count-stat-card');
+          const card = githubStatEl.closest('.stat-strip-item');
           if (card) card.style.opacity = '0.5';
           if (githubStatEl.dataset.countWantsAnimate === '1') {
             animateCount(githubStatEl, 0);
