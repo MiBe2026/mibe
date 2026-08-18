@@ -455,7 +455,7 @@
 
     /* ─── ABOUT ──────────────────────────────────────────────── */
     #about { background: var(--bg2); }
-    .about-text-solo { max-width: 640px; }
+    .about-text-solo { max-width: none; }
     .about-text-solo p {
       color: var(--muted);
       font-size: 15px;
@@ -645,7 +645,7 @@
       font-size: 14px;
       color: var(--muted);
       line-height: 1.8;
-      max-width: 600px;
+      max-width: none;
     }
     .milestone-body strong { color: var(--text); }
     .milestone-tag {
@@ -687,6 +687,7 @@
       border-left: 3px solid var(--green);
       padding-left: 16px;
       line-height: 1.8;
+      max-width: none;
     }
     .ipos-grid {
       display: grid;
@@ -766,7 +767,7 @@
       font-size: 15px;
       line-height: 1.8;
       color: var(--muted);
-      max-width: 520px;
+      max-width: none;
     }
     .tabs-window {
       margin-top: 28px;
@@ -867,17 +868,38 @@
       transition: opacity 0.25s ease;
     }
     .preview-loading.hidden { opacity: 0; pointer-events: none; }
-    .preview-caption { padding: 18px 20px 22px; border-top: 1px solid rgba(255,255,255,0.08); }
-    .preview-caption-title {
+    .sample-brief {
+      margin-top: 28px;
+      padding: 16px 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--green);
+      border-radius: 8px;
       font-family: var(--font-mono);
+      transition: border-left-color 0.2s ease;
+    }
+    .sample-brief-name {
       font-weight: 700;
       font-size: 14px;
-      margin-bottom: 4px;
+      color: var(--text);
+      margin-bottom: 10px;
     }
-    .preview-caption-body {
-      color: rgba(255,255,255,0.5);
-      font-size: 12.5px;
-      font-family: var(--font-mono);
+    .sample-brief-line {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .sample-brief-line + .sample-brief-line { margin-top: 6px; }
+    .sample-brief-label {
+      flex-shrink: 0;
+      width: 64px;
+      color: var(--green);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      padding-top: 2px;
     }
     @media (prefers-reduced-motion: reduce) {
       .preview-frame, .preview-loading, .tab { transition: none !important; }
@@ -886,6 +908,8 @@
       .ipos-grid-2col { grid-template-columns: 1fr; }
       .preview-frame-wrap { aspect-ratio: 4 / 5; }
       .address-url { font-size: 11px; }
+      .sample-brief-line { flex-direction: column; gap: 2px; }
+      .sample-brief-label { width: auto; padding-top: 0; }
     }
 
     /* ─── CONTACT ────────────────────────────────────────────── */
