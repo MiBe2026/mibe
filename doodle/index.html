@@ -23,6 +23,7 @@
     /* ─── DOODLE PAGE — page-scoped, not worth putting in the shared
        stylesheet since nothing else on the site needs it ─────── */
     .doodle-hero { max-width: 900px; }
+    .doodle-hero .card-sub { max-width: none; }
     .doodle-box {
       position: relative;
       width: 100%;
@@ -97,7 +98,7 @@
   <main class="card-hero doodle-hero">
     <a href="../" class="doodle-home-link card-mark-link"><img src="../mibe-mark.svg" alt="MiBe.uk mark" class="card-mark" width="56" height="40" /></a>
     <h1 class="card-title"><a href="../" class="doodle-home-link">Mystic MiBe.</a></h1>
-    <p class="card-sub">Draw a doodle. This page will use science and faith to represent your TRUE thoughts.</p>
+    <p class="card-sub">Draw your inner most doodles on the canvas below. This page will use science and faith to represent your TRUE thoughts.</p>
 
     <div class="doodle-box">
       <canvas id="doodle-canvas" width="560" height="420"></canvas>
@@ -105,7 +106,6 @@
     </div>
     <p class="doodle-caption" id="doodle-caption"></p>
 
-    <p class="card-footnote">Draw with a mouse, finger, or misplaced confidence.</p>
     <p class="doodle-back"><a href="../#facts">&larr; back to MiBe.uk</a></p>
   </main>
 
@@ -188,13 +188,16 @@
       ];
 
       const MIN_DRAG_PX = 30;
+      const WAIT_MS     = 2000;
       const REVEAL_MS   = 2400;
       const SHOW_MS     = 1800;
       const FADE_MS     = 300;
 
-      let state = 'idle'; // idle | drawing | revealing | shown | fading
-      let points = [];
+      let state = 'idle'; // idle | drawing | waiting | revealing | shown | fading
+      let strokes = []; // completed strokes this round, each an array of {x,y}
+      let points = [];  // the in-progress stroke
       let raf = null;
+      let waitTimer = null;
       let particles = [];
 
       function css(name) {
@@ -222,8 +225,8 @@
         ctx.clearRect(0, 0, rect.width, rect.height);
       }
 
-      function drawRawStroke(opacity) {
-        if (points.length < 2 || opacity <= 0) return;
+      function drawStrokePath(pts, opacity) {
+        if (pts.length < 2 || opacity <= 0) return;
         ctx.save();
         ctx.globalAlpha = opacity;
         ctx.strokeStyle = css('--muted');
@@ -231,8 +234,8 @@
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         ctx.beginPath();
-        ctx.moveTo(points[0].x, points[0].y);
-        for (let i = 1; i < points.length; i++) ctx.lineTo(points[i].x, points[i].y);
+        ctx.moveTo(pts[0].x, pts[0].y);
+        for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
         ctx.stroke();
         ctx.restore();
       }
@@ -283,15 +286,28 @@
         return { minX, minY, maxX, maxY, w: maxX - minX, h: maxY - minY };
       })();
 
-      // where/how big to draw the fixed shape on the current canvas —
-      // recomputed per reveal so it stays centered if the box resizes
-      function shapeTransform() {
+      // center of a stroke's own bounding box — each stroke gets its own
+      // shape, positioned where that particular line was drawn
+      function boundsCenter(pts) {
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        pts.forEach((p) => {
+          minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
+          minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y);
+        });
+        return { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
+      }
+
+      // where/how big to draw one shape instance, centered on the given
+      // point — shrinks a bit once there's more than one, so several
+      // shapes can sit on the canvas without swallowing it whole
+      function shapeTransformAt(center) {
         const rect = canvas.getBoundingClientRect();
-        const scale = (rect.height * 0.5) / SHAPE_BOUNDS.h;
+        const sizeFactor = strokes.length > 1 ? 0.55 : 1;
+        const scale = (rect.height * 0.5 * sizeFactor) / SHAPE_BOUNDS.h;
         return {
           scale,
-          ox: rect.width / 2 - ((SHAPE_BOUNDS.minX + SHAPE_BOUNDS.maxX) / 2) * scale,
-          oy: rect.height / 2 - ((SHAPE_BOUNDS.minY + SHAPE_BOUNDS.maxY) / 2) * scale,
+          ox: center.x - ((SHAPE_BOUNDS.minX + SHAPE_BOUNDS.maxX) / 2) * scale,
+          oy: center.y - ((SHAPE_BOUNDS.minY + SHAPE_BOUNDS.maxY) / 2) * scale,
         };
       }
 
@@ -374,11 +390,10 @@
         ctx.restore();
       }
 
-      function spawnParticles(tf) {
-        particles = [];
+      function spawnParticlesAt(tf) {
         const cx = tf.ox + ((SHAPE_BOUNDS.minX + SHAPE_BOUNDS.maxX) / 2) * tf.scale;
         const cy = tf.oy + ((SHAPE_BOUNDS.minY + SHAPE_BOUNDS.maxY) / 2) * tf.scale;
-        const n = 14;
+        const n = strokes.length > 1 ? 8 : 14;
         for (let i = 0; i < n; i++) {
           const angle = Math.random() * Math.PI * 2;
           const speed = 40 + Math.random() * 90;
@@ -407,42 +422,49 @@
         ctx.restore();
       }
 
-      // idle/drawing render — just the live stroke as the user draws
+      // idle/drawing/waiting render — every completed stroke so far, plus
+      // the one currently being drawn if there is one
       function render() {
         clear();
-        if (state === 'drawing') drawRawStroke(1);
+        strokes.forEach((s) => drawStrokePath(s, 1));
+        if (state === 'drawing') drawStrokePath(points, 1);
       }
 
-      let lastTransform = null;
+      let lastItems = null;
 
       function runReveal() {
-        const tf = shapeTransform();
-        lastTransform = tf;
-        spawnParticles(tf);
-
-        // morph the actual drawn line, point-for-point, into the target
-        // shape — resample both to the same point count so each point of
-        // what you drew has a direct partner on the shape to ease toward
+        // each stroke morphs, point-for-point, into its own copy of the
+        // shape, positioned on that stroke's own bounding-box center — so
+        // n lines drawn become n shapes rather than one merged path
         const n = SHAPE.length;
-        const userPts = resamplePath(points, n);
-        const targetPts = SHAPE.map((p) => ({
-          x: tf.ox + p.x * tf.scale,
-          y: tf.oy + p.y * tf.scale,
-        }));
+        const items = strokes.map((strokePts) => {
+          const tf = shapeTransformAt(boundsCenter(strokePts));
+          const userPts = resamplePath(strokePts, n);
+          const targetPts = SHAPE.map((p) => ({
+            x: tf.ox + p.x * tf.scale,
+            y: tf.oy + p.y * tf.scale,
+          }));
+          return { tf, userPts, targetPts, current: userPts.map((p) => ({ ...p })) };
+        });
+        lastItems = items;
+
+        particles = [];
+        items.forEach((it) => spawnParticlesAt(it.tf));
 
         const start = performance.now();
-        const current = userPts.map((p) => ({ ...p }));
 
         function frame(now) {
           const t = Math.min(1, (now - start) / REVEAL_MS);
           const eased = easeInOutCubic(t);
-          for (let i = 0; i < n; i++) {
-            current[i].x = userPts[i].x + (targetPts[i].x - userPts[i].x) * eased;
-            current[i].y = userPts[i].y + (targetPts[i].y - userPts[i].y) * eased;
-          }
 
           clear();
-          drawMorphLine(current, 1);
+          items.forEach((it) => {
+            for (let i = 0; i < n; i++) {
+              it.current[i].x = it.userPts[i].x + (it.targetPts[i].x - it.userPts[i].x) * eased;
+              it.current[i].y = it.userPts[i].y + (it.targetPts[i].y - it.userPts[i].y) * eased;
+            }
+            drawMorphLine(it.current, 1);
+          });
           drawParticles(t);
 
           if (t < 1) {
@@ -466,13 +488,13 @@
         state = 'fading';
         caption.classList.remove('visible');
 
-        const tf = lastTransform || shapeTransform();
+        const items = lastItems || [];
         const start = performance.now();
 
         function frame(now) {
           const t = Math.min(1, (now - start) / FADE_MS);
           clear();
-          drawShapePath(tf, 1, 1 - t, false);
+          items.forEach((it) => drawShapePath(it.tf, 1, 1 - t, false));
 
           if (t < 1) {
             raf = requestAnimationFrame(frame);
@@ -485,11 +507,25 @@
 
       function resetToIdle() {
         if (raf) cancelAnimationFrame(raf);
+        if (waitTimer) { clearTimeout(waitTimer); waitTimer = null; }
         state = 'idle';
+        strokes = [];
         points = [];
         particles = [];
         clear();
         hint.style.opacity = '1';
+      }
+
+      // (re)starts the 2s no-input countdown — fires the reveal if nothing
+      // else gets drawn before it elapses
+      function scheduleReveal() {
+        if (waitTimer) clearTimeout(waitTimer);
+        waitTimer = setTimeout(() => {
+          waitTimer = null;
+          if (state !== 'waiting') return;
+          state = 'revealing';
+          runReveal();
+        }, WAIT_MS);
       }
 
       function pointerDown(e) {
@@ -498,7 +534,8 @@
           resetToIdle();
           return; // this click just dismisses — draw again on the next one
         }
-        if (state !== 'idle') return;
+        if (state !== 'idle' && state !== 'waiting') return;
+        if (waitTimer) { clearTimeout(waitTimer); waitTimer = null; }
         state = 'drawing';
         hint.style.opacity = '0';
         points = [getPos(e)];
@@ -516,12 +553,18 @@
         const p0 = points[0];
         const p1 = points[points.length - 1];
         const dist = Math.hypot(p1.x - p0.x, p1.y - p0.y);
-        if (points.length < 2 || dist < MIN_DRAG_PX) {
+        if (points.length >= 2 && dist >= MIN_DRAG_PX) {
+          strokes.push(points);
+        }
+        points = [];
+
+        if (strokes.length === 0) {
           resetToIdle();
           return;
         }
-        state = 'revealing';
-        runReveal();
+        state = 'waiting';
+        render();
+        scheduleReveal();
       }
 
       canvas.addEventListener('pointerdown', pointerDown);
