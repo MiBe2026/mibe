@@ -524,6 +524,10 @@
     .food-tech {
       cursor: none;
       position: relative;
+      text-decoration: none;
+    }
+    .food-tech:hover {
+      text-decoration: none;
     }
     .food-tech::after {
       content: '🏆 actual achievement';
